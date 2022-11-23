@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class='user'>
+    <h2> Detail of user: {{ session.username }} </h2>
+    <h3> {{ tier }} member </h3>
+    <img src="{{ url_for('static', filename='/img/avatar/' + avatarname) }}" />
+    <p> First name: {{ firstname }} </p>
+    <p> Last name: {{ lastname }} </p>
+    <p> Address: {{ useraddress }} </p>
+    <p> Email: {{ mail }} </p>
+    <p> Phone number: {{ phone }} </p>
+</div>
+
+<br>
+
+<div class='user'>
+    <h2> Update detail of user </h2>
+    <form action="/user">
+        <input type="text" id="firstname" placeholder="first name" name="firstname"/><br>
+        <input type="text" id="lastname" placeholder="last name" name="lastname"/><br>
+        <input type="text" id="address" placeholder="address" name="address"/><br>
+        <input type="text" id="email" placeholder="email" name="email"/><br>
+        <input type="text" id="phone" placeholder="phone number" name="phone"/><br>
+        <input type="submit" value="Confirm"/>
+    </form>
+</div>
+
+<br>
+
+<div class='user'>
+    <h2> Change password </h2>
+    <form action="{{ url_for('user') }}" method="post">
+        <input type="text" id="oldpw" placeholder="current password" name="oldpw"/><br>
+        <input type="text" id="newpw" placeholder="new password" name="newpw"/><br>
+        <input type="submit" value="Confirm"/>
+    </form> 
+</div>
+
+<br>
+
+<div class='user'>
+    <h2> Upload avatar </h2>
+    <form method=post enctype=multipart/form-data>
+        <input type=file name=file>
+        <input type=submit value=Upload>
+    </form>
+</div>
+
+{% endblock %}

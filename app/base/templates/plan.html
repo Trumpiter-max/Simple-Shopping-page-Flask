@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div>
+    <h2> Status: {{ tier }} member </h2>
+    <h3> Balance: {{ current_balance }} $</h3>
+</div><br>
+
+<div class="row">
+    <div class="column">
+        <div class="buyvip">
+            <h3> Silver member with 50$ </h3>
+            <p>Get discout for day </p>
+            <form action="plan?becomevip=1" method="POST">
+                <button name="buy" value="buy">Buy</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="column">
+        <div class="buyvip">
+            <h3> Gold member with 100$ </h3>
+            <p> Get discout for month </p>
+            <form action="plan?becomevip=2" method="POST">
+                <button name="buy" value="buy">Buy</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="column">
+        <div class="buyvip">
+            <h3> Plantium member with 500$ </h3>
+            <p> Get discout for year </p>
+            <form action="plan?becomevip=3" method="POST">
+                <button name="buy" value="buy">Buy</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="cancelvip">
+    <h3> Cancel plan </h3>
+    <form action="plan?cancelvip=true" method="POST">
+        <button name="cancel" value="cancel">Cancel</button>
+    </form>
+</div>
+
+{% endblock %}

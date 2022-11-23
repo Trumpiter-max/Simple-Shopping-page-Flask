@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h2>{% block title %} Cart of user {{session.username}}: {% endblock %}</h2>
+{% for cart in cart %}
+
+<div class='cart'>
+    <p>Name: {{ cart['product_name'] }}</p>
+    <p>Quantity: {{ cart['productQuantity'] }} </p>
+    <p>Price: {{ cart['total'] }} $</p>
+</div>
+
+{% endfor %}
+
+<h3> {{ msg }} </h3></br>
+<h3>Total price: {{ total_price }} $</h3>
+
+<form action="/cart">
+    <input type="submit" name="action" value="CheckOut" />
+    <input type="submit" name="action" value="ClearCart" />
+</form>
+
+{% endblock %}
