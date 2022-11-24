@@ -35,7 +35,7 @@ def plan():
                 return redirect(url_for('user'))
             else:
                 return('Cancel failed')
-      
+
         # become member
         if tier != 'Free':
             return('You are already VIP member')
@@ -45,16 +45,19 @@ def plan():
                 if (float(current_balance) < 50.0):
                     return("Not enough money")
                 becomeMember(1, current_balance, 50.0, 1)
+                return(redirect(url_for('plan')))
             # tier 2: vip in 30 day
             elif int(vip) == 2:
                 if (float(current_balance) < 100.0):
                     return("Not enough money")
                 becomeMember(2, current_balance, 100.0, 30)
+                return(redirect(url_for('plan')))
             # tier 3: vip in 365 day
             elif int(vip) == 3:
                 if (float(current_balance) < 500.0):
                     return("Not enough money")
                 becomeMember(3, current_balance, 500.0, 365)
+                return(redirect(url_for('plan')))
             else:
                 return('Bad request')
               

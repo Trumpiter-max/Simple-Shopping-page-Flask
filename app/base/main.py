@@ -20,10 +20,10 @@ from apscheduler.executors.pool import ThreadPoolExecutor, ProcessPoolExecutor
 from apscheduler.schedulers.background import BackgroundScheduler, BlockingScheduler
 
 # define project path of database
-PATH = '/var/www/app/base/test.db'
+PATH = '/app/base/test.db'
 
 # defince upload image path for project
-IMG_PATH = '/var/www/app/base/static/img'
+IMG_PATH = '/app/base/static/img'
 
 # set file extension for uploading    
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
