@@ -7,18 +7,16 @@ def user():
         return redirect('/login')
 
     conn = getDatabaseConnect(PATH)
-    userData = conn.execute('SELECT * FROM account WHERE userID = ?', (session.get('id'), )).fetchall()
+    userData = conn.execute('SELECT email, firstname, lastname, useraddress, avatarname, tier, phone FROM account WHERE userID = ?', (session.get('id'), )).fetchall()
 
     # get data from user data
-    mail = userData[0][3]
-    firstname = userData[0][4]
-    lastname = userData[0][5]
-    useraddress = userData[0][6]
-    avatarname = userData[0][7]
-    tier = int(userData[0][9])
-    phone = userData[0][10]
-
-    print(userData)
+    mail = userData[0][0]
+    firstname = userData[0][1]
+    lastname = userData[0][2]
+    useraddress = userData[0][3]
+    avatarname = userData[0][4]
+    tier = int(userData[0][5])
+    phone = userData[0][6]
 
     if tier == 1:
         tier = 'Silver'
@@ -93,14 +91,14 @@ def user():
         if check:
             conn.execute('UPDATE account SET userPassword = ? WHERE userID = ?', (newUserPassword, session.get('id'), ))
             conn.commit()
-
         conn.close()
+        
     # process upload avatar
     if request.method == 'POST':
         uploadFile()
         return(redirect(url_for('user')))
 
-    conn.close()
+    
     return render_template(('user.html'), firstname=firstname, lastname=lastname, useraddress=useraddress, avatarname=avatarname, tier=tier, mail=mail, phone=phone)
 
 def updatedata(name, data):
