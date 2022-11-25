@@ -1,7 +1,7 @@
 # library zone
 
 # some essential modoule of flask
-from flask import Flask, render_template, request, redirect, session, url_for, app
+from flask import Flask, render_template, request, redirect, session, url_for, app, flash
 from flask_ngrok import run_with_ngrok
 
 # sql, regex, hash, request, and operating system library
@@ -63,13 +63,13 @@ dictConfig(
 )
 
 # using for connecting to database and get data, return list, can commit change
-def get_db_connection(path):
+def getDatabaseConnect(path):
     conn = sqlite3.connect(path) 
     conn.row_factory = sqlite3.Row
     return conn 
 
 # same above, return tuple, can't commit change
-def get_data(path):
+def getData(path):
     conn = sqlite3.connect(path)
     cursor = conn.cursor()
     return cursor 
@@ -78,13 +78,13 @@ def get_data(path):
 def encrypt(data):
     return str(hashlib.md5(data.encode()).hexdigest())
 
-def validate_input(input):
+def validateInput(input):
     regex = r"(\s*([\0\b\'\"\n\r\t\%\_\\]*\s*(((select\s*.+\s*from\s*.+)|(select\s*.+\s*if\s*.+)|(union\s*.+\s*select\s*.+)|(insert\s*.+\s*into\s*.+)|(update\s*.+\s*set\s*.+)|(delete\s*.+\s*from\s*.+)|(drop\s*.+)|(truncate\s*.+)|(\s*.+#|--)|(alter\s*.+)|(exec\s*.+)|(\s*(all|any|not|and|between|in|like|or|some|contains|containsall|containskey|where|sleep|waitfor|delay)\s*.+[\=\>\<=\!\~]+.+)|(let\s+.+[\=]\s*.*)|(begin\s*.*\s*end)|(\s*[\/\*]+\s*.*\s*[\*\/]+)|(\s*(\-\-)\s*.*\s+)|(\s*(contains|containsall|containskey)\s+.*)))(\s*[\;]\s*)*)+)"
     if re.match(regex, input):
         return False
     return True
 
-def allowed_file(filename):
+def allowedFile(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 # setup shedule mode

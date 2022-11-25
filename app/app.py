@@ -15,7 +15,7 @@ app.config["SECRET_KEY"] = config('SECRET_KEY')
 
 @app.route('/', methods = ['POST', 'GET'])
 def index():
-    conn = get_db_connection(PATH)
+    conn = getDatabaseConnect(PATH)
     if request.method == 'POST':
         # using for authenticate valid session
         if (session.get('loggedin') == True): 
@@ -24,17 +24,18 @@ def index():
             name = request.form.get('name')
 
             # query from table to find suit product
-            tmp = conn.execute('SELECT * FROM product WHERE productID = ?',(name, )).fetchall()
-            num = tmp[0][4]
-            price = tmp[0][3]
+            temp = conn.execute('SELECT * FROM product WHERE productID = ?',(name, )).fetchall()
+            defaultNumber = temp[0][4]
+            price = temp[0][3]
 
             # validate input
-            if not validate_input(name):
-                return('Bad input')
+            if not validateInput(name):
+                return('Invalid name')
 
             # check valid request
-            if (number <= 0) or (number > num) or (type(num) != int):
-                return("Bad Request")
+            if (number <= 0) or (number > defaultNumber):
+                flash("Invalid number of product")
+                return redirect('/')
             
             # add value to session for using in cart later
             # check if product is exist in database
@@ -43,12 +44,14 @@ def index():
                 # if exist
                 conn.execute('UPDATE cart SET productQuantity = ?, total = ? WHERE productID = ? AND userID = ?',(number, float(number*price), name, session.get('id'), ))
                 conn.commit()
-                return('Update cart successfully')
+                flash('Update cart successfully')
+                return redirect('/')
             else:
                 # not exist
                 conn.execute('INSERT INTO cart (userID, productID, productQuantity, total) VALUES (?, ?, ?, ?)', (session.get('id'), name, number, number*price, ))
                 conn.commit()
-                return('Added to cart')
+                flash('Added to cart')
+                return redirect('/')
 
         else:
             return('You need to login first')

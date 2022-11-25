@@ -3,35 +3,45 @@ from base.main import *
 @app.route('/register', methods =['GET', 'POST'])
 def register():
     # check if user is in database. If not, create new one
-    msg = ''
-    if request.method == 'POST' and 'username' in request.form and 'pw' in request.form and 'email' in request.form :
+    if request.method == 'POST' and 'username' in request.form and 'userPassword' in request.form and 'email' in request.form :
         username = request.form['username']
-        pw = request.form['pw']
+        userPassword = request.form['userPassword']
         email = request.form['email']
-        pw = encrypt(pw)
-
+        
         # check if account exist
-        conn = get_db_connection(PATH)
-        check = conn.execute('SELECT * FROM account WHERE username = ? AND pw = ?',(username, pw, )).fetchone()
+        conn = getDatabaseConnect(PATH)
+        check = conn.execute('SELECT * FROM account WHERE username = ? AND userPassword = ?',(username, userPassword, )).fetchone()
+        
         if check:
-            msg = 'Account already exists !'
+            flash('Account already exists !')
+            return redirect('/register')
+
         elif not re.match(r'[^@]+@[^@]+\.[^@]+', email):
-            msg = 'Invalid email address !'
-        elif not re.match(r'[A-Za-z0-9]+', username):
-            msg = 'Username must contain only characters and numbers !'
-        elif not username or not pw or not email:
-            msg = 'Please fill out the form !'
+            flash('Invalid email address !')
+            return redirect('/register')
+
+        elif not re.match(r'[A-Za-z0-9]{4,}', username):
+            flash('Username at least 4 characters must contain only characters and numbers !')
+            return redirect('/register')
+
+        elif not re.match(r'^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$', userPassword):
+            flash('Password must contain at least 8 characters, at least one letter and one number')
+            return redirect('/register')
+
+        elif not username or not userPassword or not email:
+            flash('Please fill out the form !')
+            return redirect('/register')
+
         else:
-            
-            conn = get_db_connection(PATH)
-            conn.execute('INSERT INTO account (username, pw, email, balance, tier, avatarname) VALUES ( ?, ?, ?, 0, 0, "default.jpg")', (username, pw, email, ))
+            userPassword = encrypt(userPassword)
+            conn.execute('INSERT INTO account (username, userPassword, email, balance, tier, avatarname) VALUES ( ?, ?, ?, 0.0, 0, "default.jpg")', (username, userPassword, email, ))
             conn.commit()
-            msg = 'You have successfully registered !'
-            return redirect('/')
-
-        conn.close()
-
+            conn.close()
+            flash('You have successfully registered !')
+            return redirect(url_for('login'))
+        
     elif request.method == 'POST':
-        msg = 'Please fill out the form !'
+        flash('Please fill out the form !')
+        return redirect('/register')
 
-    return render_template('register.html', msg = msg)
+    return render_template('register.html')

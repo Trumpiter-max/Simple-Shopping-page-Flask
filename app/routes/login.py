@@ -4,50 +4,50 @@ from base.main import *
 def login():
     # check if user is in session
     if (session.get('loggedin') == True):
-        return('You are already login as user: ' + session.get('username'))
+        flash('You are already login as user: ' + session.get('username'))
+        return redirect('/')
 
     # check user is exist or not
-    msg = ''
-    if request.method == 'POST' and 'username' in request.form and 'pw' in request.form:
+    if request.method == 'POST' and 'username' in request.form and 'userPassword' in request.form:
 
         username = request.form['username']
-        pw = request.form['pw']
-
+        userPassword = request.form['userPassword']
         remember = request.form.getlist('remember')
-
         capcha = request.form['g-recaptcha-response']
-        pw = encrypt(pw)
+        userPassword = encrypt(userPassword)
         
         # validate username
-        if username != None:
-            if not validate_input(username) or not validate_input(pw):
+        if username is not None:
+            if not validateInput(username) or not validateInput(userPassword):
                 return('Bad input')
 
         # if user is in database, make a new session
         if capchaVerify(capcha, config('SECRET_CAPCHA_KEY')):
-            conn = get_db_connection(PATH)
-            account = conn.execute('SELECT * FROM account WHERE username = ? AND pw = ?', (username, pw,)).fetchone()
+            conn = getDatabaseConnect(PATH)
+            account = conn.execute('SELECT * FROM account WHERE username = ? AND userPassword = ?', (username, userPassword,)).fetchone()
+            conn.close()
             if account:
-                
                 if remember:
                     # session last 1 week
-                    make_session_permanent(43200)
+                    makeSessionPermanent(43200)
                 else:
                     # session last 5 minutes
-                    make_session_permanent(5)
+                    makeSessionPermanent(5)
 
                 session['loggedin'] = True
                 session['id'] = account['userID']
                 session['username'] = account['username']
-                msg = 'Login successfully'
+                flash('Login successfully')
                 return redirect(url_for('index'))
             else:
-                msg = 'Incorrect username or password !'
-        else:
-            return('Capcha error')
-        conn.close()
+                flash('Incorrect username or password !')
+                return redirect('/login')
 
-    return render_template('login.html', msg = msg, key = config('PUBLIC_CAPCHA_KEY'))
+        else:
+            flash('Capcha error')
+            return redirect('/login')
+        
+    return render_template('login.html', key = config('PUBLIC_CAPCHA_KEY'))
 
 def capchaVerify(response, secret_key):
     user_ip_address = request.environ.get('HTTP_X_REAL_IP', request.remote_addr)
@@ -58,6 +58,6 @@ def capchaVerify(response, secret_key):
     return False
 
 # making session expired 
-def make_session_permanent(time):
+def makeSessionPermanent(expireTime):
     session.permanent = True
-    app.permanent_session_lifetime = timedelta(minutes=time)
+    app.permanent_session_lifetime = timedelta(minutes=expireTime)

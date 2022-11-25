@@ -2,14 +2,13 @@
 
 {% block content %}
 
-<h3> Current balance: {{ current_balance }} $</h3>
-<div class="msg">{{ msg }}</div>
+<h3> Current balance: {{ currentBalance }} $</h3>
 
 <div class="balance">
     <h3> Recharge </h3>
     <form action="{{ url_for('balance') }}" method="POST">
         <input id="credit" name="credit" type="text" placeholder="Enter credit you want to add" class="textbox" /></br></br>
-        <input id="pw" name="pw" type="password" placeholder="Enter Your Password" class="textbox" /></br></br></br>
+        <input id="userPassword" name="userPassword" type="password" placeholder="Enter Your Password" class="textbox" /></br></br></br>
         <input type="submit" name="submit" class="btn" value="Confirm"></br></br>
     </form>
 </div>
@@ -19,7 +18,7 @@
     <form action="{{ url_for('balance') }}" method="POST">
         <input id="destination" name="destination" type="text" placeholder="Enter user id" class="textbox" /></br></br>
         <input id="money" name="money" type="text" placeholder="Enter amount" class="textbox" /></br></br>
-        <input id="pw" name="pw" type="password" placeholder="Enter Your Password" class="textbox" /></br></br></br>
+        <input id="userPassword" name="userPassword" type="password" placeholder="Enter Your Password" class="textbox" /></br></br></br>
         <input type="submit" name="submit" class="btn" value="Transfer"></br></br>
     </form>
 </div>

@@ -43,6 +43,12 @@
             background-color: #f0e6e6
         }
 
+        .alert {
+            padding: 5px;
+            margin: 5px;
+            background-color: #efd9d9
+        }
+
         img {
             display: block;
             max-width: 128px;
@@ -158,10 +164,23 @@
     </div>
 
     <hr>
-    <div class="content">
-        {% block content %}
 
-        {% endblock %}
+    
+
+        <div class="container">
+            {% for message in get_flashed_messages() %}
+            <div class="alert">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                {{ message }}
+            </div>
+            {% endfor %}
+    
+            <div class="content">
+                {% block content %}
+                {% endblock %}
+            </div>
+
+        
     </div>
 </body>
 

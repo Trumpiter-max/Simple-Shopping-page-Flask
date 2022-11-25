@@ -3,7 +3,8 @@ from base.main import *
 @app.route('/logout')
 def logout():
     if (session.get('loggedin') != True):
-        return('You need to login first')
+        flash('You need to login first')
+        return('/login')
 
     # pop user data from session 
     session.pop('loggedin', None)

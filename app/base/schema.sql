@@ -16,7 +16,7 @@ CREATE TABLE product (
 CREATE TABLE account (
     userID INTEGER PRIMARY KEY AUTOINCREMENT,
     username TEXT NOT NULL,
-    pw TEXT NOT NULL,
+    userPassword TEXT NOT NULL,
     email TEXT NOT NULL,
     firstname TEXT,
     lastname TEXT,

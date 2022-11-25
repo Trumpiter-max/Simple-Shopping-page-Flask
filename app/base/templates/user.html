@@ -17,7 +17,7 @@
 
 <div class='user'>
     <h2> Update detail of user </h2>
-    <form action="/user">
+    <form action="/user?update=bio">
         <input type="text" id="firstname" placeholder="first name" name="firstname"/><br>
         <input type="text" id="lastname" placeholder="last name" name="lastname"/><br>
         <input type="text" id="address" placeholder="address" name="address"/><br>
@@ -31,9 +31,9 @@
 
 <div class='user'>
     <h2> Change password </h2>
-    <form action="{{ url_for('user') }}" method="post">
-        <input type="text" id="oldpw" placeholder="current password" name="oldpw"/><br>
-        <input type="text" id="newpw" placeholder="new password" name="newpw"/><br>
+    <form action="/user?update=password" method="post">
+        <input type="text" id="oldUserPassword" placeholder="current password" name="oldUserPassword"/><br>
+        <input type="text" id="newUserPassword" placeholder="new password" name="newUserPassword"/><br>
         <input type="submit" value="Confirm"/>
     </form> 
 </div>
@@ -42,7 +42,7 @@
 
 <div class='user'>
     <h2> Upload avatar </h2>
-    <form method=post enctype=multipart/form-data>
+    <form method=post enctype=multipart/form-data action="/user?update=avatar">
         <input type=file name=file>
         <input type=submit value=Upload>
     </form>
